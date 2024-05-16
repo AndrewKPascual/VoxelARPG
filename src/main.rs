@@ -1,7 +1,6 @@
 use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
-    input::{InputPlugin, ButtonInput},
     app::AppExit,
 };
 
@@ -26,7 +25,6 @@ struct Player;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        // .add_plugins(InputPlugin) // Removed as DefaultPlugins already includes InputPlugin
         .insert_resource(VoxelTerrain::new(Vec3::new(100.0, 100.0, 100.0), 1.0))
         // Add the CharacterPlugin to the app
         .add_plugin(CharacterPlugin)
@@ -35,10 +33,10 @@ fn main() {
         // Add the CombatPlugin to the app
         .add_plugin(CombatPlugin)
         // Initialize the startup system
-        .add_systems(Startup, setup)
-        .add_systems(Startup, voxel_terrain_setup)
-        .add_systems(Update, player_input_system)
-        .add_systems(Update, exit_on_esc_system)
+        .add_startup_system(setup)
+        .add_startup_system(voxel_terrain_setup)
+        .add_system(player_input_system)
+        .add_system(exit_on_esc_system)
         .run();
 }
 
@@ -46,7 +44,7 @@ fn setup(
     mut commands: Commands,
 ) {
     // Spawn a 2D camera entity
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn_bundle(Camera2dBundle::default());
 }
 
 fn voxel_terrain_setup(
@@ -59,27 +57,27 @@ fn voxel_terrain_setup(
 }
 
 fn player_input_system(
-    keyboard_input: Res<ButtonInput<KeyCode>>, // Changed from Input<KeyCode> to ButtonInput<KeyCode>
+    keyboard_input: Res<Input<KeyCode>>, // Changed from ButtonInput<KeyCode> to Input<KeyCode>
     mut query: Query<&mut Transform, With<Player>>,
 ) {
     for mut transform in query.iter_mut() {
-        if keyboard_input.pressed(KeyCode::ArrowUp) {
+        if keyboard_input.pressed(KeyCode::KeyW) {
             transform.translation.y += 2.;
         }
-        if keyboard_input.pressed(KeyCode::ArrowDown) {
+        if keyboard_input.pressed(KeyCode::KeyS) {
             transform.translation.y -= 2.;
         }
-        if keyboard_input.pressed(KeyCode::ArrowLeft) {
+        if keyboard_input.pressed(KeyCode::KeyA) {
             transform.translation.x -= 2.;
         }
-        if keyboard_input.pressed(KeyCode::ArrowRight) {
+        if keyboard_input.pressed(KeyCode::KeyD) {
             transform.translation.x += 2.;
         }
     }
 }
 
 fn exit_on_esc_system(
-    keyboard_input: Res<ButtonInput<KeyCode>>, // Changed from Input<KeyCode> to ButtonInput<KeyCode>
+    keyboard_input: Res<Input<KeyCode>>, // Changed from ButtonInput<KeyCode> to Input<KeyCode>
     mut exit: EventWriter<AppExit>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Escape) {
