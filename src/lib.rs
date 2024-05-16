@@ -1,8 +1,7 @@
 use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
-    app::AppExit,
-    input::Input,
+    app::{App, AppExit},
 };
 
 mod voxel_terrain;
@@ -27,7 +26,7 @@ use items::ItemPlugin;
 #[derive(Component)]
 struct Player;
 
-fn main() {
+pub fn run_app() {
     App::new()
         .add_plugins(DefaultPlugins)
         .insert_resource(VoxelTerrain::new(Vec3::new(100.0, 100.0, 100.0), 1.0))
@@ -42,6 +41,7 @@ fn main() {
         // Initialize the startup system
         .add_startup_system(setup)
         .add_startup_system(voxel_terrain_setup)
+        // Add systems to the app
         .add_system(player_input_system)
         .add_system(exit_on_esc_system)
         .run();

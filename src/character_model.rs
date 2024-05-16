@@ -55,25 +55,27 @@ fn setup_characters(
     character_assets.hat_material = materials.add(Color::rgb(0.1, 0.1, 0.1).into());
 
     // Spawn the character entity with the mesh, material, and animation component
-    commands.spawn_bundle(PbrBundle {
-        mesh: character_assets.character_mesh.clone(),
-        material: character_assets.character_material.clone(),
-        ..Default::default()
-    })
-    .insert(Character)
-    .insert(CharacterAnimation {
-        current_frame: 0,
-        total_frames: 2, // Assuming we have 2 frames for simplicity
-        frame_duration: 0.5, // Change the frame every 0.5 seconds
-        elapsed_time: 0.0,
-    });
+    commands
+        .spawn_bundle(PbrBundle {
+            mesh: character_assets.character_mesh.clone(),
+            material: character_assets.character_material.clone(),
+            ..Default::default()
+        })
+        .insert(Character)
+        .insert(CharacterAnimation {
+            current_frame: 0,
+            total_frames: 2, // Assuming we have 2 frames for simplicity
+            frame_duration: 0.5, // Change the frame every 0.5 seconds
+            elapsed_time: 0.0,
+        });
 
     // Spawn the hat entity with the mesh and material
-    commands.spawn_bundle(PbrBundle {
-        mesh: character_assets.hat_mesh.clone(),
-        material: character_assets.hat_material.clone(),
-        transform: Transform::from_xyz(0.0, 0.75, 0.0), // Position the hat above the character
-        ..Default::default()
-    })
-    .insert(Hat);
+    commands
+        .spawn_bundle(PbrBundle {
+            mesh: character_assets.hat_mesh.clone(),
+            material: character_assets.hat_material.clone(),
+            transform: Transform::from_xyz(0.0, 0.75, 0.0), // Position the hat above the character
+            ..Default::default()
+        })
+        .insert(Hat);
 }

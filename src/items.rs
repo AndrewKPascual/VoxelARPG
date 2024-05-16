@@ -1,4 +1,6 @@
-use bevy::prelude::*;
+use bevy::{
+    prelude::*,
+};
 
 // Define the types of items available in the game
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -63,8 +65,12 @@ fn add_item_system(
     // Logic for adding items to the inventory would be implemented here
     // This is a placeholder example of adding an item to the first inventory found
     for mut inventory in query.iter_mut() {
-        let hat_material_handle = materials.add(Color::rgb(0.1, 0.1, 0.1).into());
-        let hat_mesh_handle = meshes.add(Mesh::from(shape::Cube { size: 0.5 }));
+        let hat_material_handle = materials.add(StandardMaterial {
+            base_color: Color::rgb(0.1, 0.1, 0.1),
+            ..Default::default()
+        });
+        // Corrected the creation of the Cuboid mesh with the half_size field
+        let hat_mesh_handle = meshes.add(Mesh::from(Cuboid { half_size: Vec3::new(0.25, 0.25, 0.25) }));
 
         let item = Item {
             name: "Mystic Hat".to_string(),

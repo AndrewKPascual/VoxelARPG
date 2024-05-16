@@ -5,10 +5,9 @@ use bevy::{
         render_asset::RenderAssetUsages,
     },
     pbr::PbrBundle,
-    asset::{AssetServer, AssetPath},
 };
-use std::fs;
-use std::path::Path;
+
+// Removed unused imports
 
 // Define the voxel terrain
 pub struct VoxelTerrain {

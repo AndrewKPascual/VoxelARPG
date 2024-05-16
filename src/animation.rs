@@ -17,7 +17,7 @@ pub struct AnimationPlugin;
 impl Plugin for AnimationPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(animate_character_system);
+            .add_system(animate_character_system);
     }
 }
 
