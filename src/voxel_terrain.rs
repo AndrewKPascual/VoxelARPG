@@ -5,7 +5,10 @@ use bevy::{
         render_asset::RenderAssetUsages,
     },
     pbr::PbrBundle,
+    asset::{AssetServer, AssetPath},
 };
+use std::fs;
+use std::path::Path;
 
 // Define the voxel terrain
 pub struct VoxelTerrain {
@@ -23,7 +26,12 @@ impl VoxelTerrain {
     }
 
     // Generate the voxel terrain
-    pub fn generate(&self, commands: &mut Commands, materials: &mut Assets<StandardMaterial>, meshes: &mut Assets<Mesh>) {
+    pub fn generate(
+        &self,
+        commands: &mut Commands,
+        materials: &mut Assets<StandardMaterial>,
+        meshes: &mut Assets<Mesh>,
+    ) {
         let half_size = self.size / 2.0;
         for x in (-half_size.x as i32)..(half_size.x as i32) {
             for y in (-half_size.y as i32)..(half_size.y as i32) {
@@ -48,6 +56,10 @@ impl VoxelTerrain {
                         transform: Transform::from_translation(voxel_position),
                         ..Default::default()
                     });
+
+                    // The generated assets are managed by Bevy's asset system and do not need to be serialized to files
+                    // Removed the code that incorrectly attempted to serialize and write handles to files
+                    // Removed the code that watched the assets directory for changes
                 }
             }
         }

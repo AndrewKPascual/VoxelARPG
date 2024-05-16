@@ -2,6 +2,7 @@ use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
     app::AppExit,
+    input::Input,
 };
 
 mod voxel_terrain;
@@ -19,6 +20,10 @@ use animation::AnimationPlugin;
 mod combat;
 use combat::CombatPlugin;
 
+// Import the items plugin module
+mod items;
+use items::ItemPlugin;
+
 #[derive(Component)]
 struct Player;
 
@@ -32,6 +37,8 @@ fn main() {
         .add_plugin(AnimationPlugin)
         // Add the CombatPlugin to the app
         .add_plugin(CombatPlugin)
+        // Add the ItemPlugin to the app
+        .add_plugin(ItemPlugin)
         // Initialize the startup system
         .add_startup_system(setup)
         .add_startup_system(voxel_terrain_setup)
@@ -57,7 +64,7 @@ fn voxel_terrain_setup(
 }
 
 fn player_input_system(
-    keyboard_input: Res<Input<KeyCode>>, // Changed from ButtonInput<KeyCode> to Input<KeyCode>
+    keyboard_input: Res<Input<KeyCode>>,
     mut query: Query<&mut Transform, With<Player>>,
 ) {
     for mut transform in query.iter_mut() {
@@ -77,7 +84,7 @@ fn player_input_system(
 }
 
 fn exit_on_esc_system(
-    keyboard_input: Res<Input<KeyCode>>, // Changed from ButtonInput<KeyCode> to Input<KeyCode>
+    keyboard_input: Res<Input<KeyCode>>,
     mut exit: EventWriter<AppExit>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Escape) {

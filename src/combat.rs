@@ -3,16 +3,23 @@ use bevy::math::Vec3;
 use rand::Rng; // Assuming rand is in the dependencies
 
 // Define components for combat-related properties
+#[derive(Component)]
 pub struct Health(pub u32);
+#[derive(Component)]
 pub struct Attack(pub u32);
+#[derive(Component)]
 pub struct Defense(pub u32);
 
 // Additional components for AI
+#[derive(Component)]
 pub struct Enemy;
+#[derive(Component)]
 pub struct Player;
+#[derive(Component)]
 pub struct Velocity(pub Vec3);
 
 // Components for item effects
+#[derive(Component)]
 pub struct ItemEffects {
     pub health_bonus: i32,
     pub attack_bonus: i32,
@@ -34,6 +41,7 @@ impl Plugin for CombatPlugin {
 // System to handle attacks
 fn attack_system(
     mut commands: Commands,
+    _time: Res<Time>,
     mut query: Query<(Entity, &Attack, &mut Health, &Defense, Option<&ItemEffects>)>,
 ) {
     for (entity, attack, mut health, defense, item_effects) in query.iter_mut() {
@@ -51,7 +59,8 @@ fn attack_system(
 // System to handle health updates
 fn health_system(
     mut commands: Commands,
-    query: Query<(Entity, &mut Health, Option<&ItemEffects>)>,
+    _time: Res<Time>,
+    mut query: Query<(Entity, &mut Health, Option<&ItemEffects>)>,
 ) {
     for (entity, mut health, item_effects) in query.iter_mut() {
         // Apply health bonus from item effects
@@ -69,6 +78,7 @@ fn health_system(
 // System to handle enemy AI
 fn enemy_ai_system(
     mut commands: Commands,
+    time: Res<Time>,
     mut enemy_query: Query<(Entity, &Enemy, &mut Transform, &mut Velocity)>,
     player_query: Query<(&Player, &Transform)>,
 ) {
@@ -88,7 +98,7 @@ fn enemy_ai_system(
             }
 
             // Update the enemy's position
-            transform.translation += velocity.0 * TIME_STEP; // TIME_STEP should be the time elapsed since the last update
+            transform.translation += velocity.0 * time.delta_seconds(); // Use delta_seconds for time step
             println!("Enemy {:?} moves to {:?}", entity, transform.translation);
         }
     }

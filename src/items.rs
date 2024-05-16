@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy::ecs::system::CommandQueue;
 
 // Define the types of items available in the game
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -15,6 +14,8 @@ pub struct Item {
     pub name: String,
     pub item_type: ItemType,
     pub effects: ItemEffects,
+    pub mesh_handle: Handle<Mesh>, // Added field for the mesh handle
+    pub material_handle: Handle<StandardMaterial>, // Added field for the material handle
 }
 
 // Define the effects that an item can have on the character
@@ -26,13 +27,13 @@ pub struct ItemEffects {
 }
 
 // Define the inventory to manage and store items
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone, Component)]
 pub struct Inventory {
     pub items: Vec<Item>,
 }
 
 // Define the equipment system to allow characters to equip items
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone, Component)]
 pub struct Equipment {
     pub hat: Option<Item>,
     pub weapon: Option<Item>,
@@ -55,12 +56,16 @@ impl Plugin for ItemPlugin {
 fn add_item_system(
     mut commands: Commands,
     mut query: Query<&mut Inventory>,
-    mut command_queue: ResMut<CommandQueue>,
-    // Additional parameters for the system would be defined here
+    asset_server: Res<AssetServer>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut meshes: ResMut<Assets<Mesh>>,
 ) {
     // Logic for adding items to the inventory would be implemented here
     // This is a placeholder example of adding an item to the first inventory found
     for mut inventory in query.iter_mut() {
+        let hat_material_handle = materials.add(Color::rgb(0.1, 0.1, 0.1).into());
+        let hat_mesh_handle = meshes.add(Mesh::from(shape::Cube { size: 0.5 }));
+
         let item = Item {
             name: "Mystic Hat".to_string(),
             item_type: ItemType::Hat,
@@ -69,6 +74,8 @@ fn add_item_system(
                 attack_bonus: 2,
                 defense_bonus: 3,
             },
+            mesh_handle: hat_mesh_handle, // Assign the mesh handle
+            material_handle: hat_material_handle, // Assign the material handle
         };
         inventory.items.push(item);
         break; // Only add to the first inventory for this example
@@ -79,7 +86,6 @@ fn add_item_system(
 fn remove_item_system(
     mut commands: Commands,
     mut query: Query<&mut Inventory>,
-    mut command_queue: ResMut<CommandQueue>,
     // Additional parameters for the system would be defined here
 ) {
     // Logic for removing items from the inventory would be implemented here
@@ -94,7 +100,6 @@ fn remove_item_system(
 fn use_item_system(
     mut commands: Commands,
     mut query: Query<(&mut Inventory, &mut Equipment)>,
-    mut command_queue: ResMut<CommandQueue>,
     // Additional parameters for the system would be defined here
 ) {
     // Logic for using items and applying their effects would be implemented here

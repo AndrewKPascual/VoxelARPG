@@ -1,13 +1,19 @@
-use bevy::prelude::*;
+use bevy::{
+    prelude::*,
+    math::primitives::Cuboid,
+};
 use crate::animation::CharacterAnimation;
 
 // Define a struct for our character
+#[derive(Component)]
 pub struct Character;
 
 // Define a struct for the hat
+#[derive(Component)]
 pub struct Hat;
 
 // Define a struct to hold our character assets
+#[derive(Resource, Clone)]
 pub struct CharacterAssets {
     pub character_mesh: Handle<Mesh>,
     pub character_material: Handle<StandardMaterial>,
@@ -38,13 +44,13 @@ fn setup_characters(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut character_assets: ResMut<CharacterAssets>,
 ) {
-    // Create a cube mesh for the character body
-    character_assets.character_mesh = meshes.add(Mesh::from(shape::Cube { size: 1.0 }));
+    // Create a cuboid mesh for the character body
+    character_assets.character_mesh = meshes.add(Mesh::from(Cuboid::new(1.0, 1.0, 1.0)));
     // Create a material for the character
     character_assets.character_material = materials.add(Color::rgb(0.8, 0.7, 0.6).into());
 
-    // Create a smaller cube mesh for the hat
-    character_assets.hat_mesh = meshes.add(Mesh::from(shape::Cube { size: 0.5 }));
+    // Create a smaller cuboid mesh for the hat
+    character_assets.hat_mesh = meshes.add(Mesh::from(Cuboid::new(0.5, 0.5, 0.5)));
     // Create a material for the hat
     character_assets.hat_material = materials.add(Color::rgb(0.1, 0.1, 0.1).into());
 
