@@ -4,16 +4,16 @@ use bevy::ecs::schedule::ShouldRun;
 // Components for health and attack capabilities
 #[derive(Component)]
 pub struct Health {
-    pub current: i32,
-    pub max: i32,
+    pub current: i32, // Current health of the entity
+    pub max: i32,     // Maximum health of the entity
 }
 
 #[derive(Component)]
 pub struct Attack {
-    pub damage: i32,
+    pub damage: i32,  // Damage the entity can inflict
 }
 
-// Component for enemy AI
+// Component to mark entities as enemies for AI targeting
 #[derive(Component)]
 pub struct Enemy;
 
@@ -29,7 +29,7 @@ impl Plugin for CombatPlugin {
     }
 }
 
-// System to handle attacks
+// System to handle attacks between entities
 fn attack_system(
     mut commands: Commands,
     query: Query<(Entity, &Transform, &Attack)>,
