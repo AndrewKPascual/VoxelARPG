@@ -3,6 +3,7 @@ use bevy::prelude::*;
 // Define components for combat-related properties
 pub struct Health(pub u32);
 pub struct Attack(pub u32);
+pub struct Defense(pub u32);
 
 // Plugin to set up combat systems
 pub struct CombatPlugin;
@@ -18,11 +19,14 @@ impl Plugin for CombatPlugin {
 // System to handle attacks
 fn attack_system(
     mut commands: Commands,
-    query: Query<(Entity, &Attack, &Transform), With<Health>>,
+    mut query: Query<(Entity, &Attack, &mut Health, &Defense)>,
 ) {
-    for (entity, attack, transform) in query.iter() {
-        // Placeholder logic for attacking
-        println!("Entity {:?} attacks with power {}", entity, attack.0);
+    for (entity, attack, mut health, defense) in query.iter_mut() {
+        // Simple attack logic: if attack power is greater than defense, reduce health
+        if attack.0 > defense.0 {
+            health.0 = health.0.saturating_sub(attack.0 - defense.0);
+            println!("Entity {:?} attacks with power {}, health is now {}", entity, attack.0, health.0);
+        }
     }
 }
 
@@ -32,12 +36,8 @@ fn health_system(
     query: Query<(Entity, &mut Health)>,
 ) {
     for (entity, mut health) in query.iter_mut() {
-        // Placeholder logic for health reduction
-        if health.0 > 0 {
-            health.0 -= 1;
-            println!("Entity {:?} takes damage, health is now {}", entity, health.0);
-        } else {
-            // Entity is out of health, remove it
+        // Check if the entity is out of health and remove it
+        if health.0 == 0 {
             commands.entity(entity).despawn();
             println!("Entity {:?} has been defeated", entity);
         }
