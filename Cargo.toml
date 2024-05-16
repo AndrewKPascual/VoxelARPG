@@ -1,0 +1,8 @@
+[package]
+name = "VoxelARPG_Bevy"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = { version = "0.13.2", features = ["default"] }
+wgpu = "0.19.4"
