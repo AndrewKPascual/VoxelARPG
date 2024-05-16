@@ -1,8 +1,9 @@
 use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
+    input::keyboard::{KeyCode, Input},
     app::{App, AppExit},
-    input::keyboard::{KeyCode, KeyboardInput},
+    ecs::schedule::{StartupStage, CoreStage},
 };
 
 mod voxel_terrain;
@@ -40,8 +41,8 @@ pub fn run_app() {
         // Add the ItemPlugin to the app
         .add_plugin(ItemPlugin)
         // Initialize the startup system
-        .add_startup_system_to_stage(StartupStage::PreStartup, setup)
-        .add_startup_system_to_stage(StartupStage::PreStartup, voxel_terrain_setup)
+        .add_startup_system_to_stage(StartupStage::Startup, setup)
+        .add_startup_system_to_stage(StartupStage::Startup, voxel_terrain_setup)
         // Add systems to the app
         .add_system_to_stage(CoreStage::Update, player_input_system)
         .add_system_to_stage(CoreStage::Update, exit_on_esc_system)
@@ -52,7 +53,7 @@ fn setup(
     mut commands: Commands,
 ) {
     // Spawn a 2D camera entity
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn_bundle(Camera2dBundle::default());
 }
 
 fn voxel_terrain_setup(
@@ -65,7 +66,7 @@ fn voxel_terrain_setup(
 }
 
 fn player_input_system(
-    keyboard_input: Res<KeyboardInput>,
+    keyboard_input: Res<Input<KeyCode>>,
     mut query: Query<&mut Transform, With<Player>>,
 ) {
     for mut transform in query.iter_mut() {
@@ -85,7 +86,7 @@ fn player_input_system(
 }
 
 fn exit_on_esc_system(
-    keyboard_input: Res<KeyboardInput>,
+    keyboard_input: Res<Input<KeyCode>>,
     mut exit: EventWriter<AppExit>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Escape) {
