@@ -2,6 +2,7 @@ use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
     app::{App, AppExit},
+    input::Input,
 };
 
 mod voxel_terrain;
