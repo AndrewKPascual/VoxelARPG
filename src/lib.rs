@@ -2,7 +2,7 @@ use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
     app::{App, AppExit},
-    input::Input,
+    input::{keyboard::KeyCode, Input},
 };
 
 mod voxel_terrain;
@@ -69,16 +69,16 @@ fn player_input_system(
     mut query: Query<&mut Transform, With<Player>>,
 ) {
     for mut transform in query.iter_mut() {
-        if keyboard_input.pressed(KeyCode::KeyW) {
+        if keyboard_input.pressed(KeyCode::W) {
             transform.translation.y += 2.;
         }
-        if keyboard_input.pressed(KeyCode::KeyS) {
+        if keyboard_input.pressed(KeyCode::S) {
             transform.translation.y -= 2.;
         }
-        if keyboard_input.pressed(KeyCode::KeyA) {
+        if keyboard_input.pressed(KeyCode::A) {
             transform.translation.x -= 2.;
         }
-        if keyboard_input.pressed(KeyCode::KeyD) {
+        if keyboard_input.pressed(KeyCode::D) {
             transform.translation.x += 2.;
         }
     }
