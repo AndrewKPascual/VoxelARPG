@@ -1,5 +1,6 @@
 use bevy::{
     prelude::*,
+    ecs::schedule::CoreStage,
 };
 
 // Define the types of items available in the game
@@ -48,9 +49,10 @@ pub struct ItemPlugin;
 impl Plugin for ItemPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_system(add_item_system)
-            .add_system(remove_item_system)
-            .add_system(use_item_system);
+            .add_system_set_to_stage(CoreStage::Update, SystemSet::new()
+                .with_system(add_item_system)
+                .with_system(remove_item_system)
+                .with_system(use_item_system));
     }
 }
 
