@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 use bevy::math::Vec3;
 use rand::Rng; // Assuming rand is in the dependencies
-use bevy::ecs::schedule::CoreStage;
 
 // Define components for combat-related properties
 #[derive(Component)]
@@ -33,10 +32,9 @@ pub struct CombatPlugin;
 impl Plugin for CombatPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_system_set_to_stage(CoreStage::Update, SystemSet::new()
-                .with_system(attack_system)
-                .with_system(health_system)
-                .with_system(enemy_ai_system));
+            .add_system(attack_system)
+            .add_system(health_system)
+            .add_system(enemy_ai_system);
     }
 }
 

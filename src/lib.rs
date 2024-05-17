@@ -1,10 +1,4 @@
-use bevy::{
-    prelude::*,
-    ecs::schedule::CoreStage,
-    core_pipeline::core_2d::Camera2dBundle,
-    app::{App, AppExit},
-    input::{keyboard::KeyCode, Input},
-};
+use bevy::prelude::*;
 
 mod voxel_terrain;
 use voxel_terrain::VoxelTerrain;
@@ -44,7 +38,8 @@ pub fn run_app() {
         .add_startup_system(setup)
         .add_startup_system(voxel_terrain_setup)
         // Add systems to the app with the correct schedule label
-        .add_system_set_to_stage(CoreStage::Update, SystemSet::new().with_system(player_input_system).with_system(exit_on_esc_system))
+        .add_system(player_input_system)
+        .add_system(exit_on_esc_system)
         .run();
 }
 
