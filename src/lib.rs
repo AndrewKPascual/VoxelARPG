@@ -1,8 +1,7 @@
 use bevy::{
     prelude::*,
-    app::AppExit,
+    app::{AppExit, startup_stage::StartupStage},
     input::Input,
-    ecs::schedule::StartupStage,
 };
 
 mod voxel_terrain;
@@ -40,8 +39,8 @@ pub fn run_app() {
         // Add the ItemPlugin to the app
         .add_plugin(ItemPlugin)
         // Initialize the startup system
-        .add_startup_system_to_stage(StartupStage::Startup, setup)
-        .add_startup_system_to_stage(StartupStage::Startup, voxel_terrain_setup)
+        .add_startup_system(setup)
+        .add_startup_system(voxel_terrain_setup)
         // Add systems to the app with the correct schedule label
         .add_system(player_input_system)
         .add_system(exit_on_esc_system)
