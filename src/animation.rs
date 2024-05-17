@@ -17,7 +17,7 @@ pub struct AnimationPlugin;
 impl Plugin for AnimationPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_system(animate_character_system);
+            .add_system_to_stage(CoreStage::Update, animate_character_system);
     }
 }
 

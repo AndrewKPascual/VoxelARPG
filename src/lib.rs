@@ -1,9 +1,8 @@
 use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
-    input::keyboard::{KeyCode, Input},
-    app::{App, AppExit},
-    ecs::schedule::{StartupStage, CoreStage},
+    app::{App, AppExit, CoreStage, StartupStage},
+    input::{keyboard::KeyCode, Input},
 };
 
 mod voxel_terrain;
@@ -41,8 +40,8 @@ pub fn run_app() {
         // Add the ItemPlugin to the app
         .add_plugin(ItemPlugin)
         // Initialize the startup system
-        .add_startup_system_to_stage(StartupStage::Startup, setup)
-        .add_startup_system_to_stage(StartupStage::Startup, voxel_terrain_setup)
+        .add_startup_system_to_stage(StartupStage::PreStartup, setup)
+        .add_startup_system_to_stage(StartupStage::PreStartup, voxel_terrain_setup)
         // Add systems to the app
         .add_system_to_stage(CoreStage::Update, player_input_system)
         .add_system_to_stage(CoreStage::Update, exit_on_esc_system)

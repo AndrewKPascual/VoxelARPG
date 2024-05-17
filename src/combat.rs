@@ -32,9 +32,9 @@ pub struct CombatPlugin;
 impl Plugin for CombatPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_system(attack_system)
-            .add_system(health_system)
-            .add_system(enemy_ai_system);
+            .add_system_to_stage(CoreStage::Update, attack_system)
+            .add_system_to_stage(CoreStage::Update, health_system)
+            .add_system_to_stage(CoreStage::Update, enemy_ai_system);
     }
 }
 
