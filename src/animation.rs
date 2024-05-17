@@ -18,7 +18,8 @@ impl Plugin for AnimationPlugin {
     fn build(&self, app: &mut App) {
         app
             // Updated to use the correct method for Bevy 0.13.2
-            .add_systems(animate_character_system);
+            // Added schedule label as per Bevy 0.13.2 API requirements
+            .add_systems(SystemStage::Update, animate_character_system);
     }
 }
 
