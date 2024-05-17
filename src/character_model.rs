@@ -34,7 +34,7 @@ impl Plugin for CharacterPlugin {
                 hat_material: Default::default(),
             })
             // Updated to use the correct method for Bevy 0.13.2
-            .add_startup_system(setup_characters);
+            .add_startup_system_to_stage(StartupStage::Startup, setup_characters);
     }
 }
 
@@ -66,7 +66,8 @@ fn setup_characters(
     // Spawn the character entity with the mesh, material, and animation component
     commands
         // Updated to use the correct method for Bevy 0.13.2
-        .spawn_bundle(PbrBundle {
+        .spawn()
+        .insert_bundle(PbrBundle {
             mesh: character_assets.character_mesh.clone(),
             material: character_assets.character_material.clone(),
             ..Default::default()
@@ -82,7 +83,8 @@ fn setup_characters(
     // Spawn the hat entity with the mesh and material
     commands
         // Updated to use the correct method for Bevy 0.13.2
-        .spawn_bundle(PbrBundle {
+        .spawn()
+        .insert_bundle(PbrBundle {
             mesh: character_assets.hat_mesh.clone(),
             material: character_assets.hat_material.clone(),
             transform: Transform::from_xyz(0.0, 0.75, 0.0), // Position the hat above the character
