@@ -51,9 +51,9 @@ fn setup(
     mut commands: Commands,
 ) {
     // Spawn a 2D camera entity
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands.spawn().insert_bundle(Camera2dBundle::default());
     // Spawn the player entity
-    commands.spawn_bundle(SpriteBundle {
+    commands.spawn().insert_bundle(SpriteBundle {
         transform: Transform {
             translation: Vec3::new(0.0, -215.0, 0.0),
             scale: Vec3::new(0.5, 0.5, 1.0),
