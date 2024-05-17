@@ -18,7 +18,7 @@ impl Plugin for AnimationPlugin {
     fn build(&self, app: &mut App) {
         app
             // Updated to use the correct method for Bevy 0.13.2
-            .add_system(animate_character_system);
+            .add_system_set_to_stage(CoreStage::Update, SystemSet::new().with_system(animate_character_system));
     }
 }
 
