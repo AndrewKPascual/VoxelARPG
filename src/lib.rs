@@ -1,5 +1,9 @@
-use bevy::prelude::*;
-use bevy::app::AppExit;
+use bevy::{
+    prelude::*,
+    app::AppExit,
+    input::Input,
+    ecs::schedule::StartupStage,
+};
 
 mod voxel_terrain;
 use voxel_terrain::VoxelTerrain;
@@ -28,16 +32,16 @@ pub fn run_app() {
         .add_plugins(DefaultPlugins)
         .insert_resource(VoxelTerrain::new(Vec3::new(100.0, 100.0, 100.0), 1.0))
         // Add the CharacterPlugin to the app
-        .add_plugins(CharacterPlugin)
+        .add_plugin(CharacterPlugin)
         // Add the AnimationPlugin to the app
-        .add_plugins(AnimationPlugin)
+        .add_plugin(AnimationPlugin)
         // Add the CombatPlugin to the app
-        .add_plugins(CombatPlugin)
+        .add_plugin(CombatPlugin)
         // Add the ItemPlugin to the app
-        .add_plugins(ItemPlugin)
+        .add_plugin(ItemPlugin)
         // Initialize the startup system
-        .add_startup_system(setup)
-        .add_startup_system(voxel_terrain_setup)
+        .add_startup_system_to_stage(StartupStage::Startup, setup)
+        .add_startup_system_to_stage(StartupStage::Startup, voxel_terrain_setup)
         // Add systems to the app with the correct schedule label
         .add_system(player_input_system)
         .add_system(exit_on_esc_system)
@@ -48,9 +52,9 @@ fn setup(
     mut commands: Commands,
 ) {
     // Spawn a 2D camera entity
-    commands.spawn().insert_bundle(Camera2dBundle::default());
+    commands.spawn_bundle(Camera2dBundle::default());
     // Spawn the player entity
-    commands.spawn().insert_bundle(SpriteBundle {
+    commands.spawn_bundle(SpriteBundle {
         transform: Transform {
             translation: Vec3::new(0.0, -215.0, 0.0),
             scale: Vec3::new(0.5, 0.5, 1.0),
