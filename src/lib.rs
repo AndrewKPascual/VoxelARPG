@@ -2,7 +2,7 @@ use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
     app::{App, AppExit},
-    input::{keyboard::KeyCode, ButtonInput},
+    input::{keyboard::KeyCode, Input},
 };
 
 mod voxel_terrain;
@@ -75,7 +75,7 @@ fn voxel_terrain_setup(
 }
 
 fn player_input_system(
-    keyboard_input: Res<ButtonInput<KeyCode>>,
+    keyboard_input: Res<Input<KeyCode>>,
     mut query: Query<&mut Transform, With<Player>>,
 ) {
     for mut transform in query.iter_mut() {
@@ -95,7 +95,7 @@ fn player_input_system(
 }
 
 fn exit_on_esc_system(
-    keyboard_input: Res<ButtonInput<KeyCode>>,
+    keyboard_input: Res<Input<KeyCode>>,
     mut exit: EventWriter<AppExit>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Escape) {
