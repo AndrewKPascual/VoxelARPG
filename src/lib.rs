@@ -1,8 +1,9 @@
 use bevy::{
     prelude::*,
     core_pipeline::core_2d::Camera2dBundle,
-    app::AppExit,
-    input::keyboard::KeyCode,
+    app::{App, AppExit},
+    input::{keyboard::KeyCode, ButtonInput},
+    ecs::schedule::{SystemStage, Schedule},
 };
 
 mod voxel_terrain;
@@ -53,6 +54,16 @@ fn setup(
 ) {
     // Spawn a 2D camera entity
     commands.spawn_bundle(Camera2dBundle::default());
+    // Spawn the player entity
+    commands.spawn_bundle(SpriteBundle {
+        transform: Transform {
+            translation: Vec3::new(0.0, -215.0, 0.0),
+            scale: Vec3::new(0.5, 0.5, 1.0),
+            ..Default::default()
+        },
+        ..Default::default()
+    })
+    .insert(Player);
 }
 
 fn voxel_terrain_setup(
@@ -65,27 +76,27 @@ fn voxel_terrain_setup(
 }
 
 fn player_input_system(
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut Transform, With<Player>>,
 ) {
     for mut transform in query.iter_mut() {
-        if keyboard_input.pressed(KeyCode::Up) {
+        if keyboard_input.pressed(KeyCode::KeyW) {
             transform.translation.y += 2.;
         }
-        if keyboard_input.pressed(KeyCode::Down) {
+        if keyboard_input.pressed(KeyCode::KeyS) {
             transform.translation.y -= 2.;
         }
-        if keyboard_input.pressed(KeyCode::Left) {
+        if keyboard_input.pressed(KeyCode::KeyA) {
             transform.translation.x -= 2.;
         }
-        if keyboard_input.pressed(KeyCode::Right) {
+        if keyboard_input.pressed(KeyCode::KeyD) {
             transform.translation.x += 2.;
         }
     }
 }
 
 fn exit_on_esc_system(
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut exit: EventWriter<AppExit>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Escape) {
