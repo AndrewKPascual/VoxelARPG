@@ -33,6 +33,7 @@ impl Plugin for CharacterPlugin {
                 hat_mesh: Default::default(),
                 hat_material: Default::default(),
             })
+            // Updated to use the correct method for Bevy 0.13.2
             .add_startup_system(setup_characters);
     }
 }
@@ -47,15 +48,24 @@ fn setup_characters(
     // Create a cuboid mesh for the character body
     character_assets.character_mesh = meshes.add(Mesh::from(Cuboid::new(1.0, 1.0, 1.0)));
     // Create a material for the character
-    character_assets.character_material = materials.add(Color::rgb(0.8, 0.7, 0.6).into());
+    // Updated to use the correct type for Bevy 0.13.2
+    character_assets.character_material = materials.add(StandardMaterial {
+        base_color: Color::rgb(0.8, 0.7, 0.6),
+        ..Default::default()
+    });
 
     // Create a smaller cuboid mesh for the hat
     character_assets.hat_mesh = meshes.add(Mesh::from(Cuboid::new(0.5, 0.5, 0.5)));
     // Create a material for the hat
-    character_assets.hat_material = materials.add(Color::rgb(0.1, 0.1, 0.1).into());
+    // Updated to use the correct type for Bevy 0.13.2
+    character_assets.hat_material = materials.add(StandardMaterial {
+        base_color: Color::rgb(0.1, 0.1, 0.1),
+        ..Default::default()
+    });
 
     // Spawn the character entity with the mesh, material, and animation component
     commands
+        // Updated to use the correct method for Bevy 0.13.2
         .spawn_bundle(PbrBundle {
             mesh: character_assets.character_mesh.clone(),
             material: character_assets.character_material.clone(),
@@ -71,6 +81,7 @@ fn setup_characters(
 
     // Spawn the hat entity with the mesh and material
     commands
+        // Updated to use the correct method for Bevy 0.13.2
         .spawn_bundle(PbrBundle {
             mesh: character_assets.hat_mesh.clone(),
             material: character_assets.hat_material.clone(),

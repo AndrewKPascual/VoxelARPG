@@ -56,7 +56,6 @@ impl Plugin for ItemPlugin {
 
 // System to add items to the inventory
 fn add_item_system(
-    commands: Commands,
     mut query: Query<&mut Inventory>,
     asset_server: Res<AssetServer>,
     mut materials: ResMut<Assets<StandardMaterial>>,
@@ -90,7 +89,6 @@ fn add_item_system(
 
 // System to remove items from the inventory
 fn remove_item_system(
-    commands: Commands,
     mut query: Query<&mut Inventory>,
     // Additional parameters for the system would be defined here
 ) {
@@ -104,7 +102,6 @@ fn remove_item_system(
 
 // System to use items and apply their effects
 fn use_item_system(
-    commands: Commands,
     mut query: Query<(&mut Inventory, &mut Equipment)>,
     // Additional parameters for the system would be defined here
 ) {
