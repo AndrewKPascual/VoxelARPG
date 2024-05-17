@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy::app::AppExit;
 
 mod voxel_terrain;
 use voxel_terrain::VoxelTerrain;
@@ -27,19 +28,19 @@ pub fn run_app() {
         .add_plugins(DefaultPlugins)
         .insert_resource(VoxelTerrain::new(Vec3::new(100.0, 100.0, 100.0), 1.0))
         // Add the CharacterPlugin to the app
-        .add_plugin(CharacterPlugin)
+        .add_plugins(CharacterPlugin)
         // Add the AnimationPlugin to the app
-        .add_plugin(AnimationPlugin)
+        .add_plugins(AnimationPlugin)
         // Add the CombatPlugin to the app
-        .add_plugin(CombatPlugin)
+        .add_plugins(CombatPlugin)
         // Add the ItemPlugin to the app
-        .add_plugin(ItemPlugin)
+        .add_plugins(ItemPlugin)
         // Initialize the startup system
-        .add_startup_system(setup)
-        .add_startup_system(voxel_terrain_setup)
+        .add_startup_system_to_stage(StartupStage::PreStartup, setup)
+        .add_startup_system_to_stage(StartupStage::PreStartup, voxel_terrain_setup)
         // Add systems to the app with the correct schedule label
-        .add_system(player_input_system)
-        .add_system(exit_on_esc_system)
+        .add_systems_to_stage(CoreStage::Update, player_input_system)
+        .add_systems_to_stage(CoreStage::Update, exit_on_esc_system)
         .run();
 }
 

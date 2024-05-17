@@ -46,9 +46,9 @@ pub struct ItemPlugin;
 impl Plugin for ItemPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_system(add_item_system)
-            .add_system(remove_item_system)
-            .add_system(use_item_system);
+            .add_systems(add_item_system)
+            .add_systems(remove_item_system)
+            .add_systems(use_item_system);
     }
 }
 
