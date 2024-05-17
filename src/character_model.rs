@@ -1,7 +1,9 @@
 use bevy::{
     prelude::*,
-    math::primitives::Cuboid,
+    app::App,
+    ecs::schedule::SystemStage,
 };
+
 use crate::animation::CharacterAnimation;
 
 // Define a struct for our character
@@ -34,7 +36,7 @@ impl Plugin for CharacterPlugin {
                 hat_material: Default::default(),
             })
             // Updated to use the correct method for Bevy 0.13.2
-            .add_startup_system_to_stage(StartupStage::Startup, setup_characters);
+            .add_startup_system(setup_characters);
     }
 }
 
@@ -46,18 +48,16 @@ fn setup_characters(
     mut character_assets: ResMut<CharacterAssets>,
 ) {
     // Create a cuboid mesh for the character body
-    character_assets.character_mesh = meshes.add(Mesh::from(Cuboid::new(1.0, 1.0, 1.0)));
+    character_assets.character_mesh = meshes.add(Mesh::from(shape::Cube { size: 1.0 }));
     // Create a material for the character
-    // Updated to use the correct type for Bevy 0.13.2
     character_assets.character_material = materials.add(StandardMaterial {
         base_color: Color::rgb(0.8, 0.7, 0.6),
         ..Default::default()
     });
 
     // Create a smaller cuboid mesh for the hat
-    character_assets.hat_mesh = meshes.add(Mesh::from(Cuboid::new(0.5, 0.5, 0.5)));
+    character_assets.hat_mesh = meshes.add(Mesh::from(shape::Cube { size: 0.5 }));
     // Create a material for the hat
-    // Updated to use the correct type for Bevy 0.13.2
     character_assets.hat_material = materials.add(StandardMaterial {
         base_color: Color::rgb(0.1, 0.1, 0.1),
         ..Default::default()
@@ -65,9 +65,7 @@ fn setup_characters(
 
     // Spawn the character entity with the mesh, material, and animation component
     commands
-        // Updated to use the correct method for Bevy 0.13.2
-        .spawn()
-        .insert_bundle(PbrBundle {
+        .spawn_bundle(PbrBundle {
             mesh: character_assets.character_mesh.clone(),
             material: character_assets.character_material.clone(),
             ..Default::default()
@@ -82,9 +80,7 @@ fn setup_characters(
 
     // Spawn the hat entity with the mesh and material
     commands
-        // Updated to use the correct method for Bevy 0.13.2
-        .spawn()
-        .insert_bundle(PbrBundle {
+        .spawn_bundle(PbrBundle {
             mesh: character_assets.hat_mesh.clone(),
             material: character_assets.hat_material.clone(),
             transform: Transform::from_xyz(0.0, 0.75, 0.0), // Position the hat above the character
